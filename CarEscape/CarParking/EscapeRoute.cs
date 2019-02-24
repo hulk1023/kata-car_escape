@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CarParking
 {
@@ -6,12 +7,38 @@ namespace CarParking
     {
         public string[] FindRoute(int[][] carParking)
         {
-            int[] _carPosition = new int[2] {carParking.Length - 1, -1};
-            _carPosition = FindCarPosition(carParking, _carPosition);
+            List<string> escapeSteps = new List<string>();
 
-            int lotsToEscape = carParking[_carPosition[0]].Length - _carPosition[1] - 1;
+            int[] _carInitPosition = new int[2] {carParking.Length - 1, -1};
+            _carInitPosition = FindCarPosition(carParking, _carInitPosition);
 
-            return new string[]{$"R{lotsToEscape.ToString()}"};
+            int _stairCasePosition = 0;
+            while (_stairCasePosition < carParking[_carInitPosition[0]].Length)
+            {
+                if (carParking[_carInitPosition[0]][_stairCasePosition] == 1)
+                {
+                    break;
+                }
+                _stairCasePosition++;
+            }
+            int lotsToStaircase = _stairCasePosition - _carInitPosition[1];
+            string direction = _stairCasePosition > 0 ? "R" : "L";
+
+            escapeSteps.Add($"{direction}{Math.Abs(lotsToStaircase)}");
+
+            int[] _carNowPosition = (int[]) _carInitPosition.Clone();
+            _carNowPosition[0]++;
+            _carNowPosition[1] = lotsToStaircase;
+            escapeSteps.Add("D1");
+
+            int lotsToEscape = carParking[_carNowPosition[0]].Length - _carNowPosition[1] - 1;
+
+            if (lotsToEscape != 0)
+            {
+                escapeSteps.Add($"R{lotsToEscape.ToString()}");
+            }
+
+            return escapeSteps.ToArray();
 
 
         }
