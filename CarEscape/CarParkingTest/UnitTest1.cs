@@ -70,5 +70,23 @@ namespace Tests
             Assert.AreEqual("D1", theRoute[7]);
             Assert.AreEqual("R4", theRoute[8]);
         }
+
+        [Test]
+        public void EscapedVeryLeftFromLv3ButJust2LotsOnLv2()
+        {
+            int[][] _carParking =
+                new int[][]
+                {
+                    new int[] { 1, 0, 0, 0, 0, 2 },
+                    new int[] { 0, 1,0 },
+                    new int[] { 0, 0, 0, 0, 0, 0 }
+                };
+            var theRoute = new EscapeRoute().FindRoute(_carParking);
+            Assert.AreEqual("L5", theRoute[0]);
+            Assert.AreEqual("D1", theRoute[1]);
+            Assert.AreEqual("R1", theRoute[2]);
+            Assert.AreEqual("D1", theRoute[3]);
+            Assert.AreEqual("R4", theRoute[4]);
+        }
     }
 }
