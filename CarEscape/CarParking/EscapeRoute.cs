@@ -57,7 +57,7 @@ namespace CarParking
             }
 
             int lotsToStaircase = _stairCasePosition - _carInitPosition[1];
-            string direction = _stairCasePosition > 0 ? "R" : "L";
+            string direction = lotsToStaircase > 0 ? "R" : "L";
             steps.Add($"{direction}{Math.Abs(lotsToStaircase)}");
 
             int[] newPosition = (int[]) _carInitPosition.Clone();
