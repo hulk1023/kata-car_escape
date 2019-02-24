@@ -16,24 +16,9 @@ namespace CarParking
 
             if (_carInitPosition[0] < carParking.Length - 1)
             {
-                int _stairCasePosition = 0;
-                while (_stairCasePosition < carParking[_carInitPosition[0]].Length)
-                {
-                    if (carParking[_carInitPosition[0]][_stairCasePosition] == 1)
-                    {
-                        break;
-                    }
-
-                    _stairCasePosition++;
-                }
-
-                int lotsToStaircase = _stairCasePosition - _carInitPosition[1];
-                string direction = _stairCasePosition > 0 ? "R" : "L";
-                escapeSteps.Add($"{direction}{Math.Abs(lotsToStaircase)}");
-
-                _carNowPosition[0] = _carInitPosition[0] + 1;
-                _carNowPosition[1] = lotsToStaircase;
-                escapeSteps.Add("D1");
+                var movingInfo = GoDownStair(carParking, _carInitPosition, escapeSteps);
+                escapeSteps = movingInfo.Steps;
+                _carNowPosition = movingInfo.NewPosition;
             }
             else
             {
@@ -48,8 +33,39 @@ namespace CarParking
             }
 
             return escapeSteps.ToArray();
+        }
 
+        private CarMovingInfo GoDownStair(int[][] carParking, int[] _carInitPosition, List<string> escapeSteps)
+        {
+            if (_carInitPosition[0] == (carParking.Length - 1))
+            {
+                return new CarMovingInfo() {NewPosition = _carInitPosition, Steps = escapeSteps};
+            }
 
+            List<string> steps = new List<string>();
+            steps.AddRange(escapeSteps);
+
+            int _stairCasePosition = 0;
+            while (_stairCasePosition < carParking[_carInitPosition[0]].Length)
+            {
+                if (carParking[_carInitPosition[0]][_stairCasePosition] == 1)
+                {
+                    break;
+                }
+
+                _stairCasePosition++;
+            }
+
+            int lotsToStaircase = _stairCasePosition - _carInitPosition[1];
+            string direction = _stairCasePosition > 0 ? "R" : "L";
+            steps.Add($"{direction}{Math.Abs(lotsToStaircase)}");
+
+            int[] newPosition = (int[]) _carInitPosition.Clone();
+            newPosition[0]++;
+            newPosition[1] = _stairCasePosition;
+            steps.Add("D1");
+
+            return GoDownStair(carParking, newPosition, steps);
         }
 
         int[] FindCarPosition(int[][] carParking, int[] _carPosition)
@@ -80,5 +96,17 @@ namespace CarParking
 
             return FindCarPosition(carParking, _carPositionRefreshed);
         }
+    }
+
+    class CarMovingInfo
+    {
+        public CarMovingInfo()
+        {
+            this.NewPosition = new int[2] {-1, -1};
+            this.Steps = new List<string>();
+        }
+
+        public int[] NewPosition { get; set; }
+        public List<string> Steps { get; set; }
     }
 }
