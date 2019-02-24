@@ -13,7 +13,7 @@ namespace Tests
         }
 
         [Test]
-        public void EscapedFromLv1()
+        public void EscapedAtVeryLeftFromLv1()
         {
             int[][] _carParking = new int[][] {new int[] {2, 0, 0, 0, 0, 0}};
             var theRoute = new EscapeRoute().FindRoute(_carParking);
